@@ -17,11 +17,11 @@ module.exports = (opts) => {
       })
       client.on('error', cb)
       client.on('notification', (d) => {
-        if (d.toString() !== 'pg-ears-test') return cb(null, d)
+        if (d.payload !== 'pg-ears-test') return cb(null, d.payload)
         attempts[channel] = 0
       })
       setInterval(
-        (() => {
+        () => {
           let testClient = new Pg(opts)
           let handleErr = (e) => {
             attempts[channel] = attempts[channel] || 0
@@ -38,7 +38,7 @@ module.exports = (opts) => {
               if (testClient && testClient.end) testClient.end()
             })
           })
-        })(),
+        },
         30000
       )
     })

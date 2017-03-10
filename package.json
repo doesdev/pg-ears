@@ -1,0 +1,31 @@
+{
+  "name": "pg-ears",
+  "version": "0.9.0",
+  "description": "Resilient Postgres listen client",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doesdev/pg-ears.git"
+  },
+  "keywords": [
+    "pg",
+    "postgres.listen",
+    "subscribe",
+    "notify"
+  ],
+  "author": "Andrew Carpenter (https://github.com/doesdev)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/doesdev/pg-ears/issues"
+  },
+  "homepage": "https://github.com/doesdev/pg-ears#readme",
+  "dependencies": {
+    "pg": "^6.1.4"
+  },
+  "devDependencies": {
+    "ava": "^0.18.2"
+  }
+}

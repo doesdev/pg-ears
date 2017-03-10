@@ -10,7 +10,7 @@ $ npm install --save pg-ears
 
 ## api
 
-pg-ears exports a single function takes the same options as a new `node-postgres` `Client` and returns a promise that resolves with an object containing the methods `listen` and `notify`
+pg-ears exports a single function takes the same options as a new `node-postgres` `Client` and returns an object containing the methods `listen` and `notify`
 
 - **options** *(Object - required)* Options for [node-postgres](https://github.com/brianc/node-postgres) connection
 

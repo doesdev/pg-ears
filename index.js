@@ -6,7 +6,7 @@ const maxAttempts = 60
 const attempts = {}
 
 // export
-module.exports = (opts) => new Promise((resolve, reject) => {
+module.exports = (opts) => {
   let listen = (channel, cb) => {
     let client = new Pg(opts)
     client.connect((err) => {
@@ -54,5 +54,5 @@ module.exports = (opts) => new Promise((resolve, reject) => {
       })
     })
   }
-  resolve({listen, notify})
-})
+  return {listen, notify}
+}

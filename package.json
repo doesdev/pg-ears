@@ -12,7 +12,8 @@
   },
   "keywords": [
     "pg",
-    "postgres.listen",
+    "postgres",
+    "listen",
     "subscribe",
     "notify"
   ],

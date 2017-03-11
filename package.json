@@ -1,8 +1,9 @@
 {
   "name": "pg-ears",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Resilient Postgres listen client",
   "main": "index.js",
+  "files": ["index.js"],
   "scripts": {
     "test": "ava"
   },

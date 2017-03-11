@@ -2,13 +2,15 @@
 
 // setup
 const Pg = require('pg').Client
-const checkInterval = 30000
-const maxAttempts = 60
 const attempts = {}
 const lastMsg = {}
+let maxAttempts = 60
+let checkInterval = 30000
 
 // export
 module.exports = (opts) => {
+  maxAttempts = opts.maxAttempts || maxAttempts
+  checkInterval = opts.checkInterval || checkInterval
   let listen = (channel, cb) => {
     let testClient
     lastMsg[channel] = Date.now()

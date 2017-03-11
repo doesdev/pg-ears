@@ -10,9 +10,11 @@ $ npm install --save pg-ears
 
 ## api
 
-pg-ears exports a single function takes the same options as a new `node-postgres` `Client` and returns an object containing the methods `listen` and `notify`
+pg-ears exports a single function takes the same options as a new `node-postgres` `new Client(opts)` with a couple additions and returns an object containing the methods `listen` and `notify`
 
-- **options** *(Object - required)* Options for [node-postgres](https://github.com/brianc/node-postgres) connection
+- **options** *(Object - required)* Options for [node-postgres](https://github.com/brianc/node-postgres) connection plus the following:
+ - **checkInterval** *(Number (ms) - optional - default: 30000 [30 sec.])*
+ - **maxAttempts** *(Number - optional - default: 60)* Multiplier of checkInterval - number of attempts before giving up on reconnect
 
 `listen(channel, callback)`
 - **channel** *(String - required)*

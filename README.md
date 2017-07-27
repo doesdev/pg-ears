@@ -1,4 +1,4 @@
-# pg-ears [![NPM version](https://badge.fury.io/js/pg-ears.svg)](https://npmjs.org/package/pg-ears)   [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
+# pg-ears [![NPM version](https://badge.fury.io/js/pg-ears.svg)](https://npmjs.org/package/pg-ears)   [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)   [![Dependency Status](https://dependencyci.com/github/doesdev/pg-ears/badge)](https://dependencyci.com/github/doesdev/pg-ears)
 
 > Resilient Postgres listen client
 

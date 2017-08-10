@@ -45,6 +45,20 @@ pgEars.notify('mychannel', {key: 'value'}, (err) => {
 })
 ```
 
+## Use safe identifiers as channel names
+
+:warning: Channel names in postgresql are `identifiers`, just like the name of a table or a column.
+Please refer to the offical postgresql documentation about valid [identifiers](https://www.postgresql.org/docs/current/static/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS).
+
+node-postgres does not currently allows channel names to be parameterized to avoid sql-injection attacks.
+
+See node-postgres [issue #1258](https://github.com/brianc/node-postgres/issues/1258) for details.
+
+**pg-ears performs no validation or sanitation on the channel names and they are inserted into the sql queries as-is.**
+
+On the other hand, payloads of your notifications are json encoded and decoded automatically by pg-ears and passed using safe parameterized queries.
+
+
 ## license
 
 MIT © [Andrew Carpenter](https://github.com/doesdev)

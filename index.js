@@ -41,7 +41,7 @@ module.exports = (opts) => {
         testClient = new Pg(opts)
         testClient.connect((err) => {
           if (err) return setTimeout((err) => retry(err), checkInterval)
-          testClient.query(`NOTIFY ${channel}, 'pg-ears-test';`, (err) => {
+          testClient.query('SELECT pg_notify($1, $2)', [channel, 'pg-ears-test'], (err) => {
             if (err) return setTimeout((err) => retry(err), checkInterval)
             if (testClient && testClient.end) testClient.end()
             setTimeout(checkConnection, checkInterval)
@@ -66,7 +66,7 @@ module.exports = (opts) => {
     payload = JSON.stringify(payload)
     client.connect((err) => {
       if (err) return cb(err)
-      client.query(`NOTIFY ${channel}, '${payload}';`, (e) => {
+      client.query('SELECT pg_notify($1, $2)', [channel, payload], (e) => {
         if (e) return cb(e)
         if (client && client.end) client.end()
       })

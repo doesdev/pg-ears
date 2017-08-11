@@ -1,7 +1,7 @@
 'use strict'
 
 // setup
-const Pg = require('pg').Client
+const { Client } = require('pg')
 const attempts = {}
 const lastMsg = {}
 let maxAttempts = 60
@@ -14,7 +14,7 @@ module.exports = (opts) => {
   let listen = (channel, cb) => {
     let testClient
     lastMsg[channel] = Date.now()
-    let client = new Pg(opts)
+    let client = new Client(opts)
     let retry = (err) => {
       attempts[channel] = attempts[channel] || 0
       attempts[channel] += 1
@@ -38,7 +38,7 @@ module.exports = (opts) => {
         if (d.payload !== 'pg-ears-test') return cb(null, d.payload)
       })
       let checkConnection = () => {
-        testClient = new Pg(opts)
+        testClient = new Client(opts)
         testClient.connect((err) => {
           if (err) return setTimeout((err) => retry(err), checkInterval)
           testClient.query('SELECT pg_notify($1, $2)', [channel, 'pg-ears-test'], (err) => {
@@ -62,12 +62,13 @@ module.exports = (opts) => {
     })
   }
   let notify = (channel, payload, cb) => {
-    let client = new Pg(opts)
-    payload = JSON.stringify(payload)
+    let client = new Client(opts)
+    let hasCb = typeof cb === 'function'
+    if (typeof payload !== 'string') payload = JSON.stringify(payload)
     client.connect((err) => {
-      if (err) return cb(err)
+      if (err && hasCb) return cb(err)
       client.query('SELECT pg_notify($1, $2)', [channel, payload], (e) => {
-        if (e) return cb(e)
+        if (e && hasCb) return cb(e)
         if (client && client.end) client.end()
       })
     })

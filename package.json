@@ -1,6 +1,6 @@
 {
   "name": "pg-ears",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Resilient Postgres listen client",
   "main": "index.js",
   "files": [
@@ -27,9 +27,9 @@
   },
   "homepage": "https://github.com/doesdev/pg-ears#readme",
   "dependencies": {
-    "pg": "^7.1.0"
+    "pg": "^7.4.3"
   },
   "devDependencies": {
-    "ava": "^0.21.0"
+    "ava": "^0.25.0"
   }
 }

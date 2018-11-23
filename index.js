@@ -1,6 +1,5 @@
 'use strict'
 
-// setup
 const { Client } = require('pg')
 const attempts = {}
 const lastMsg = {}
@@ -8,7 +7,6 @@ const maxAttemptsDefault = 60
 const checkIntervalDefault = 30000
 const notifyQ = `SELECT pg_notify($1, $2)`
 
-// export
 module.exports = (opts) => {
   const maxAttempts = opts.maxAttempts || maxAttemptsDefault
   const checkInterval = opts.checkInterval || checkIntervalDefault
@@ -16,7 +14,9 @@ module.exports = (opts) => {
   const listen = (channel, cb) => {
     let testClient
     lastMsg[channel] = Date.now()
+
     const client = new Client(opts)
+    client.on('error', (err) => cb(err))
 
     const retry = (err) => {
       attempts[channel] = attempts[channel] || 0
@@ -78,9 +78,11 @@ module.exports = (opts) => {
   }
 
   let notify = (channel, payload, cb) => {
-    const client = new Client(opts)
     const hasCb = typeof cb === 'function'
     if (typeof payload !== 'string') payload = JSON.stringify(payload)
+
+    const client = new Client(opts)
+    client.on('error', (err) => hasCb ? cb(err) : console.error(err))
 
     client.connect((err) => {
       if (err && hasCb) return cb(err)

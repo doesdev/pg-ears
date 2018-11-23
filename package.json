@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/doesdev/pg-ears#readme",
   "dependencies": {
-    "pg": "^7.4.3"
+    "pg": "^7.6.1"
   },
   "devDependencies": {
     "ava": "^0.25.0"

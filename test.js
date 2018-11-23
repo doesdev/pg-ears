@@ -3,7 +3,7 @@
 import test from 'ava'
 import pgEars from './index'
 const pgOptions = require('./../_secrets/pg-ears/config.json')
-const {listen, notify} = pgEars(pgOptions)
+const { listen, notify } = pgEars(pgOptions)
 const channel = 'my_test_channel'
 const msg = 'heydair'
 

@@ -2,13 +2,26 @@
 
 > Resilient Postgres listen client
 
-## install
+# Recommend using [pg-listen](https://github.com/andywer/pg-listen)
+
+This project is not in any production use by the author. There has also been
+very little community engagement on the module that would motivate the
+extensive time investment to make this module as good as `pg-listen`. Given
+that module has more usage and is actively maintained I would strongly
+recommend using that instead.
+
+## Known Issues
+
+- [LISTEN leaks](https://github.com/doesdev/pg-ears/issues/6):
+Upon disconnect and reconnect `LISTEN` statements accumulate
+
+## Install
 
 ```sh
 $ npm install --save pg-ears
 ```
 
-## api
+## API
 
 pg-ears exports a single function takes the same options as a new
 `node-postgres` `new Client(opts)` with a couple additions and returns an object
@@ -32,7 +45,7 @@ encounters an error
 - **callback** *(Object - optional)* will be called with error if unable to send
 OR when an error occurs on the PG client
 
-## usage
+## Usage
 
 ```js
 const options = {
@@ -71,6 +84,6 @@ On the other hand, payloads of your notifications are json encoded and decoded
 automatically by pg-ears and passed using safe parameterized queries.
 
 
-## license
+## License
 
 MIT © [Andrew Carpenter](https://github.com/doesdev)

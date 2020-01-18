@@ -5,7 +5,18 @@ const attempts = {}
 const lastMsg = {}
 const maxAttemptsDefault = 60
 const checkIntervalDefault = 30000
-const notifyQ = `SELECT pg_notify($1, $2)`
+const notifyQ = 'SELECT pg_notify($1, $2)'
+const pgOptsBase = { application_name: 'pg-ears' }
+
+const tryKill = (client) => {
+  const stream = ((client || {}).connection || {}).stream || {}
+  if (!client || !client.end) return
+  if (stream.destroyed || stream.writable === false) return
+
+  try {
+    client.end()
+  } catch (ex) {}
+}
 
 module.exports = (opts) => {
   const maxAttempts = opts.maxAttempts || maxAttemptsDefault
@@ -14,20 +25,21 @@ module.exports = (opts) => {
   const listen = (channel, cb) => {
     let testClient
     lastMsg[channel] = Date.now()
+    opts = Object.assign({}, pgOptsBase, opts)
 
-    const client = new Client(opts)
+    const client = listen.client = new Client(opts)
     client.on('error', (err) => cb(err))
 
     const retry = (err) => {
       attempts[channel] = attempts[channel] || 0
       attempts[channel] += 1
 
-      if (client && client.end) client.end()
-      if (testClient && testClient.end) testClient.end()
+      if (client && client.end) tryKill(client)
+      if (testClient && testClient.end) tryKill(testClient)
       if (attempts[channel] < maxAttempts) return listen(channel, cb)
 
       delete attempts[channel]
-      let newErr = new Error(`Too many failed attempts for ${channel}`)
+      const newErr = new Error(`Too many failed attempts for ${channel}`)
       newErr.stack = err.stack || newErr.stack
 
       return cb(newErr)
@@ -37,8 +49,12 @@ module.exports = (opts) => {
       if (err) return setTimeout((err) => retry(err), checkInterval)
       client.connection.stream.setKeepAlive(true)
 
-      client.query(`LISTEN ${channel};`, (err) => {
+      client.query(`UNLISTEN ${channel};`, (err) => {
         if (err) return setTimeout((err) => retry(err), checkInterval)
+
+        client.query(`LISTEN ${channel};`, (err) => {
+          if (err) return setTimeout((err) => retry(err), checkInterval)
+        })
       })
 
       client.on('notification', (d) => {
@@ -77,7 +93,7 @@ module.exports = (opts) => {
     })
   }
 
-  let notify = (channel, payload, cb) => {
+  const notify = (channel, payload, cb) => {
     const hasCb = typeof cb === 'function'
     if (typeof payload !== 'string') payload = JSON.stringify(payload)
 

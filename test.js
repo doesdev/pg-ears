@@ -11,7 +11,7 @@ test('it listens and notifies', async (assert) => {
   let val
 
   await new Promise((resolve, reject) => {
-    let gotIt = (err, pl) => {
+    const gotIt = (err, pl) => {
       if (err) reject(err)
       val = pl
       resolve()
